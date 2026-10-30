@@ -1,18 +1,54 @@
 name: CI
 
+# PR valida tudo o que o deploy precisa; push na main repete a validação e publica.
 on:
   push:
+    branches: [main]
   pull_request:
 
 permissions:
   contents: read
 
+# Push novo na mesma branch cancela a verificação anterior; na main nunca cancela, para não matar um deploy no meio.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+# Actions fixadas por SHA (o Dependabot atualiza); o comentário é a tag correspondente.
 jobs:
-  verificar:
+  # O workflow sempre roda (o check obrigatório "ok" precisa reportar); aqui se decide se há o que validar.
+  # Docs, README, CLAUDE.md, .claude/ e workflows não disparam verificação nem deploy.
+  filtro:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      codigo: ${{ steps.f.outputs.codigo }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dorny/paths-filter@0e4a8c6effa4802afeda77dc8d303f8176d7dfad # v3
+        id: f
+        with:
+          predicate-quantifier: every
+          filters: |
+            codigo:
+              - '**'
+              - '!README.md'
+              - '!CLAUDE.md'
+              - '!docs/**'
+              - '!.claude/**'
+              - '!.github/workflows/**'
+
+  verificar:
+    needs: filtro
+    if: needs.filtro.outputs.codigo == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 26
           cache: npm
@@ -30,7 +66,7 @@ jobs:
         run: npm run build
 
       - name: Links
-        uses: lycheeverse/lychee-action@v2
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -38,27 +74,51 @@ jobs:
           args: --root-dir ${{ github.workspace }}/site/dist --no-progress --exclude 'linkedin\.com' site/dist
           fail: true
 
-      - uses: hashicorp/setup-terraform@v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: dist
+          path: site/dist
+          retention-days: 1
+
+  # Roda em paralelo com o verificar (cada job tem seu runner).
+  terraform:
+    needs: filtro
+    if: needs.filtro.outputs.codigo == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4
       - name: Terraform (fmt e validate)
         working-directory: infra/terraform
         run: terraform fmt -check && terraform init -backend=false && terraform validate
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: dist
-          path: site/dist
+  # Único check obrigatório no ruleset. Job pulado (só docs) conta como ok; falha ou cancelamento reprova.
+  ok:
+    needs: [filtro, verificar, terraform]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Resultado
+        env:
+          RESULTADOS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "$RESULTADOS"
+          case " $RESULTADOS " in *" failure "*|*" cancelled "*) exit 1 ;; esac
 
   # O mesmo build que passou na verificação vai para produção, só em push no main.
   # Sem preview de PR: homologação é local, com docker compose (nada exposto na internet).
   deploy:
-    needs: verificar
+    needs: [verificar, terraform]
     if: vars.CLOUDFLARE_ACCOUNT_ID != '' && github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     concurrency:
       group: deploy-producao
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       # Número ou link que depende de material ainda não recebido fica marcado como PENDENTE e não vai para produção.
       - name: Trava de pendências
@@ -68,7 +128,7 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: dist
           path: dist
