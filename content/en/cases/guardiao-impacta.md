@@ -186,4 +186,4 @@ The app's interface is in Portuguese.
 ## Links
 
 - Code: [github.com/osamufelix/guardiao-impacta](https://github.com/osamufelix/guardiao-impacta)
-- Thesis (PDF, in Portuguese): <a href="/docs/monografia-guardiao-impacta.pdf" target="_blank" rel="noopener">Gamificação em security awareness</a>
+- Thesis (PDF, in Portuguese): [Gamificação em security awareness](/docs/monografia-guardiao-impacta.pdf)

@@ -64,6 +64,15 @@ const beacon = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
         } catch {}
       });
     </script>
+    <script is:inline>
+      // links externos e PDFs abrem em nova aba
+      document.querySelectorAll('a[href^="http"], a[href$=".pdf"]').forEach((a) => {
+        if (a.origin !== location.origin || a.pathname.endsWith('.pdf')) {
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+        }
+      });
+    </script>
     {
       beacon && (
         <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: beacon })} />

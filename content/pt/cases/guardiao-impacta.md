@@ -183,4 +183,4 @@ Limites: o ZAP testou só as páginas públicas, porque não faz login sozinho. 
 ## Links
 
 - Código: [github.com/osamufelix/guardiao-impacta](https://github.com/osamufelix/guardiao-impacta)
-- Monografia (PDF): <a href="/docs/monografia-guardiao-impacta.pdf" target="_blank" rel="noopener">Gamificação em security awareness</a>
+- Monografia (PDF): [Gamificação em security awareness](/docs/monografia-guardiao-impacta.pdf)
