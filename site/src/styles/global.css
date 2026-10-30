@@ -170,8 +170,11 @@ footer {
 }
 
 .top .home {
-  color: var(--accent);
   font-weight: 700;
+}
+
+.top a[aria-current] {
+  color: var(--accent);
 }
 
 .top nav {
