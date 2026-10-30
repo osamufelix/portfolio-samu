@@ -1,6 +1,6 @@
 ---
 title: Como foi feito
-description: Referência rápida da arquitetura, do pipeline e das decisões deste site.
+description: Peças, pipeline e roadmap deste site.
 ---
 
 ## Peças
@@ -17,27 +17,38 @@ description: Referência rápida da arquitetura, do pipeline e das decisões des
 
 ## Pipeline
 
-1. **PR ou push:** `astro check`, `astro build`, checagem de links e `terraform validate`.
-2. **Push no `main`:** se não houver conteúdo marcado como pendente, o build vai para produção com `wrangler pages deploy`.
-3. **Homologação:** `docker compose up` serve o build de produção em `localhost`. Não existe URL de preview pública.
+```text
+PR e push no main
+  filtro                      só docs, README e configs? nada roda e o ok passa
+  verificar                   npm ci, astro check, build e lychee (links)
+  terraform                   fmt + validate, em paralelo com verificar
+  ok                          o único check obrigatório: agrega o resultado
 
-A infraestrutura muda pouco. Por isso o `terraform apply` roda na minha máquina, e o CI só confere se o código continua válido.
+push no main, com tudo verde
+  deploy                      barra se houver números não confirmados + wrangler pages deploy do mesmo dist
+```
 
-## Decisões (ADRs)
+- A `main` publica direto em produção, então um ruleset (regra que protege o branch) exige PR e o check `ok`.
+- Actions fixadas por SHA; o Dependabot abre PR semanal para actions e npm.
+- Sem URL de preview: a homologação roda na minha máquina com `docker compose up`, com o mesmo Node do CI e acessível só por `localhost`.
+- O `terraform apply` roda na minha máquina; o CI só confere se o código continua válido.
 
-| ADR | Decisão |
-|---|---|
-| [001](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/001-astro-e-markdown.md) | Astro, com o texto em Markdown numa pasta própria |
-| [002](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/002-cloudflare-e-plano-de-saida.md) | Cloudflare no plano gratuito, com plano de saída escrito |
-| [003](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/003-terraform.md) | Terraform com state remoto e apply local |
-| [004](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/004-deploy-pelo-actions.md) | Deploy pelo GitHub Actions, não pela integração Git do Pages |
+## Roadmap
 
-## Limites declarados
+**Feito**
 
-- Sem servidor e sem banco: o site não guarda nada de quem visita.
-- Depende do Cloudflare; o ADR 002 descreve como sair.
-- Conteúdo em português e inglês.
+- [x] Infraestrutura como código com Terraform e state remoto
+- [x] CI com filtro de mudanças, checagem de links e ruleset exigindo PR
 
-## Código
+**Em seguida**
 
-Tudo está em [github.com/osamufelix/portfolio-samu](https://github.com/osamufelix/portfolio-samu).
+- [ ] Domínio próprio no lugar do `*.pages.dev`
+- [ ] **Observabilidade e métricas:** disponibilidade, desempenho e o que o pipeline entrega, medidos e abertos para consulta
+
+**Depois: chatbot**
+
+Um chat sobre os cases, que responde a partir destes mesmos textos. O foco é como ele é operado e avaliado: evals no CI que crescem a cada falha real, proteção contra abuso (captcha invisível, rate limit, teto diário de uso), kill switch (desligamento de emergência) e custo zero.
+
+**Mais adiante**
+
+- [ ] Novos cases

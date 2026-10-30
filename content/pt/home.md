@@ -1,19 +1,21 @@
 ---
 title: Samuel Felix
-description: DevOps/SRE que entrega com automação, testes e agentes de IA sob controle.
+description: Analista de DevOps na Stefanini. Construo e automatizo infraestrutura, CI/CD e segurança, com IA sob controle.
 stack:
-  - Docker Compose
-  - GitHub Actions
   - Azure
+  - GitHub Actions
+  - Docker Compose
+  - Claude Code
   - Terraform
   - Cloudflare
   - Node.js
   - React
   - PostgreSQL
   - k6
-  - Claude Code
 ---
 
-DevOps/SRE em São Paulo, formando em Ciência da Computação pela Faculdade Impacta (2026).
+Na Stefanini, implantei e opero a plataforma Kubernetes (k3s) do time de desenvolvimento, com Argo CD e Harbor, e pipelines no Azure DevOps.
 
-Aqui estão projetos meus, feitos fora do trabalho, com o código, as decisões e os números abertos para você conferir. Este site também é um deles: [veja como foi feito](/como-foi-feito).
+Formando em Ciência da Computação pelo Centro Universitário Impacta. Para o TCC, meu grupo decidiu desenvolver uma plataforma gamificada de ensino de segurança da informação para áreas não técnicas. Neste projeto, fui responsável pelo app, pela infraestrutura e pelo CI/CD: em produção, com deploy sem SSH e testes automatizados.
+
+Meus projetos têm decisões e números documentados; este site também: [veja como foi feito](/como-foi-feito).
