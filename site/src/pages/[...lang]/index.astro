@@ -1,0 +1,29 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import CaseCards from '../../components/CaseCards.astro';
+import { langPaths, prefix, ui, type Lang } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+
+const { lang } = Astro.props as { lang: Lang };
+const t = ui[lang];
+const home = (await getEntry('pages', `${lang}/home`))!;
+const { Content } = await render(home);
+const cases = await getCollection('pages', (e) => e.id.startsWith(`${lang}/cases/`));
+---
+
+<Base lang={lang} title={home.data.title} description={home.data.description}>
+  <p class="prompt">whoami</p>
+  <h1>{home.data.title}</h1>
+  <p class="lead">{home.data.description}</p>
+  <Content />
+
+  <p class="prompt">ls cases/</p>
+  <CaseCards cases={cases} lang={lang} />
+  <p><a href={`${prefix(lang)}/cases`}>{t.allCases} →</a></p>
+
+  <p class="prompt">cat stack.txt</p>
+  <p class="muted">{t.stack}:</p>
+  <ul class="tags">{home.data.stack?.map((s) => <li>{s}</li>)}</ul>
+</Base>

@@ -1,0 +1,24 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import type { Lang } from '../../../i18n';
+
+export async function getStaticPaths() {
+  const cases = await getCollection('pages', (e) => e.id.includes('/cases/'));
+  return cases.map((entry) => {
+    const [lang, , slug] = entry.id.split('/') as [Lang, string, string];
+    return { params: { lang: lang === 'pt' ? undefined : lang, slug }, props: { lang, entry } };
+  });
+}
+
+const { lang, entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Base lang={lang} title={`${entry.data.title} · Samuel Felix`} description={entry.data.description}>
+  <p class="prompt">cat cases/{entry.id.split('/').pop()}.md</p>
+  <h1>{entry.data.title}</h1>
+  <p class="lead">{entry.data.description}</p>
+  <ul class="tags">{entry.data.tags?.map((s) => <li>{s}</li>)}</ul>
+  <Content />
+</Base>

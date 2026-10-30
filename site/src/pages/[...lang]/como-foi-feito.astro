@@ -1,0 +1,20 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Diagram from '../../components/Diagram.astro';
+import { langPaths, type Lang } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+
+const { lang } = Astro.props as { lang: Lang };
+const page = (await getEntry('pages', `${lang}/como-foi-feito`))!;
+const { Content } = await render(page);
+---
+
+<Base lang={lang} title={`${page.data.title} · Samuel Felix`} description={page.data.description}>
+  <p class="prompt">cat como-foi-feito.md</p>
+  <h1>{page.data.title}</h1>
+  <p class="lead">{page.data.description}</p>
+  <Diagram lang={lang} />
+  <Content />
+</Base>

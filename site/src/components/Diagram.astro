@@ -1,0 +1,94 @@
+---
+import { icons } from './icons';
+import type { Lang } from '../i18n';
+
+const { lang } = Astro.props as { lang: Lang };
+const pt = lang === 'pt';
+
+// Nós: [cx, cy, ícone, título, subtítulo]. O ícone é uma marca (path + cor) ou um desenho próprio.
+type Icon = { path: string; color: string } | 'people' | 'person' | 'chart';
+const nodes: [number, number, Icon, string, string][] = [
+  [95, 130, 'people', pt ? 'Visitantes' : 'Visitors', pt ? 'celular ou computador' : 'phone or computer'],
+  [430, 130, { path: icons.cloudflarePages, color: '#F38020' }, 'Cloudflare Pages', pt ? 'HTML estático + CDN' : 'static HTML + CDN'],
+  [640, 130, 'chart', 'Web Analytics', pt ? 'visitas sem cookies' : 'cookieless visits'],
+  [95, 430, 'person', pt ? 'Desenvolvedor' : 'Developer', ''],
+  [255, 430, { path: icons.github, color: 'var(--fg)' }, 'GitHub', pt ? 'repositório' : 'repository'],
+  [430, 430, { path: icons.githubActions, color: '#2088FF' }, 'GitHub Actions', 'check · build · links'],
+  [640, 430, { path: icons.terraform, color: '#844FBA' }, 'Terraform', pt ? 'apply local' : 'local apply'],
+  [850, 430, { path: icons.hashicorp, color: 'var(--fg)' }, 'HCP Terraform', pt ? 'state remoto' : 'remote state'],
+];
+
+// Setas: [x1, y1, x2, y2, rótulo, mão dupla?]
+const arrows: [number, number, number, number, string, boolean?][] = [
+  [145, 130, 392, 130, 'HTTPS', true],
+  [470, 130, 600, 130, 'beacon'],
+  [135, 430, 220, 430, 'push'],
+  [290, 430, 392, 430, pt ? 'a cada push' : 'every push'],
+  [430, 392, 430, 232, 'deploy (main)'],
+  [640, 392, 640, 307, pt ? 'cria Pages e Analytics' : 'creates Pages and Analytics'],
+  [680, 430, 812, 430, 'state', true],
+];
+---
+
+<figure class="diagram">
+  <svg viewBox="0 0 960 540" role="img" aria-label={pt ? 'Arquitetura deste site' : 'Architecture of this site'}>
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" class="head" />
+      </marker>
+    </defs>
+
+    <rect class="group" x="250" y="20" width="480" height="285" />
+    <svg x="264" y="30" width="40" height="40" viewBox="0 0 24 24"><path d={icons.cloudflare} fill="#F38020" /></svg>
+    <text x="312" y="57" class="t">{pt ? 'Cloudflare: plano gratuito' : 'Cloudflare: free plan'}</text>
+
+    {
+      arrows.map(([x1, y1, x2, y2, label, both]) => (
+        <g>
+          <line x1={x1} y1={y1} x2={x2} y2={y2} marker-end="url(#arrow)" marker-start={both ? 'url(#arrow)' : undefined} />
+          {x1 === x2 ? (
+            <text x={x1 + 10} y={y1 - 40} class="lbl">{label}</text>
+          ) : (
+            <text x={(x1 + x2) / 2} y={y1 + 5} text-anchor="middle" class="lbl">{label}</text>
+          )}
+        </g>
+      ))
+    }
+
+    {
+      nodes.map(([cx, cy, icon, title, sub]) => (
+        <g>
+          {typeof icon === 'object' && (
+            <svg x={cx - 30} y={cy - 30} width="60" height="60" viewBox="0 0 24 24">
+              <path d={icon.path} fill={icon.color} />
+            </svg>
+          )}
+          {icon === 'chart' && (
+            <g fill="#F38020">
+              <rect x={cx - 28} y={cy + 4} width="11" height="22" rx="2" />
+              <rect x={cx - 13} y={cy - 12} width="11" height="38" rx="2" />
+              <rect x={cx + 2} y={cy - 2} width="11" height="28" rx="2" />
+              <rect x={cx + 17} y={cy - 26} width="11" height="52" rx="2" />
+            </g>
+          )}
+          {icon === 'people' && (
+            <g>
+              <circle cx={cx + 16} cy={cy - 18} r="13" class="p2" />
+              <path d={`M${cx - 8},${cy + 28} A24,24 0 0 1 ${cx + 40},${cy + 28} Z`} class="p2" />
+              <circle cx={cx - 12} cy={cy - 14} r="14" class="p1" />
+              <path d={`M${cx - 38},${cy + 30} A26,26 0 0 1 ${cx + 14},${cy + 30} Z`} class="p1" />
+            </g>
+          )}
+          {icon === 'person' && (
+            <g class="p1">
+              <circle cx={cx} cy={cy - 14} r="14" />
+              <path d={`M${cx - 26},${cy + 30} A26,26 0 0 1 ${cx + 26},${cy + 30} Z`} />
+            </g>
+          )}
+          <text x={cx} y={cy + 62} text-anchor="middle" class="t">{title}</text>
+          {sub && <text x={cx} y={cy + 82} text-anchor="middle">{sub}</text>}
+        </g>
+      ))
+    }
+  </svg>
+</figure>

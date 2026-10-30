@@ -1,0 +1,367 @@
+:root {
+  --bg: #f7f7f4;
+  --surface: #ffffff;
+  --fg: #1b1f24;
+  --muted: #57606a;
+  --border: #d8dbe0;
+  --accent: #116a3a;
+  --link: #0b5cad;
+  --mono: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0b0f14;
+    --surface: #11171e;
+    --fg: #d6dde6;
+    --muted: #8b98a5;
+    --border: #233040;
+    --accent: #5fd38d;
+    --link: #6cc4ff;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #0b0f14;
+  --surface: #11171e;
+  --fg: #d6dde6;
+  --muted: #8b98a5;
+  --border: #233040;
+  --accent: #5fd38d;
+  --link: #6cc4ff;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 1rem/1.65 var(--sans);
+}
+
+a {
+  color: var(--link);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--mono);
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: 1.9rem;
+}
+
+h2 {
+  font-size: 1.3rem;
+  margin-top: 2.5rem;
+}
+
+h2::before {
+  content: '## ';
+  color: var(--muted);
+}
+
+h3 {
+  font-size: 1.05rem;
+}
+
+code,
+pre {
+  font-family: var(--mono);
+  font-size: 0.9em;
+}
+
+:not(pre) > code {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.05em 0.3em;
+  overflow-wrap: anywhere;
+}
+
+/* Blocos de código com cara de terminal; o Shiki do Astro já pinta o fundo escuro. */
+pre {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.45rem 0.6rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---- estrutura ---- */
+
+.top,
+main,
+footer {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.25rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+}
+
+.top a {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.top a:hover {
+  color: var(--accent);
+}
+
+.top .lang {
+  color: var(--muted);
+}
+
+.top .lang b {
+  color: var(--accent);
+}
+
+.top .home {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.top nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.top .theme {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--fg);
+  font: inherit;
+  padding: 0.15rem 0.55rem;
+  cursor: pointer;
+}
+
+main {
+  padding-bottom: 3rem;
+}
+
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  padding-top: 1.25rem;
+  padding-bottom: 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+
+/* ---- componentes ---- */
+
+.prompt {
+  font-family: var(--mono);
+  color: var(--muted);
+  margin: 2.5rem 0 0;
+}
+
+.prompt::before {
+  content: '$ ';
+  color: var(--accent);
+}
+
+.lead {
+  font-size: 1.15rem;
+  color: var(--muted);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  list-style: none;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+.tags li {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.1rem 0.45rem;
+}
+
+.cards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.1rem;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.card:hover {
+  border-color: var(--accent);
+}
+
+.card h3 {
+  margin: 0 0 0.4rem;
+}
+
+.card p {
+  margin: 0.3rem 0;
+}
+
+.card .metric {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+
+/* Prints de celular lado a lado; a figura de arquitetura ocupa a largura toda num cartão claro. */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+figure {
+  margin: 1.5rem 0;
+}
+
+.gallery figure {
+  margin: 0;
+}
+
+figcaption {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.4rem;
+}
+
+figure img {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+figure.wide img {
+  background: #fff;
+  padding: 0.75rem;
+}
+
+/* Diagrama no estilo draw.io do TCC. No celular não encolhe até ficar ilegível: rola dentro da figura. */
+.diagram {
+  overflow-x: auto;
+}
+
+.diagram > svg {
+  width: 100%;
+  min-width: 640px;
+  height: auto;
+  font-family: var(--sans);
+}
+
+.diagram text {
+  fill: var(--fg);
+  font-size: 15px;
+}
+
+.diagram text.t {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* Rótulo das setas com um contorno da cor do fundo, para "cortar" a linha como no draw.io. */
+.diagram text.lbl {
+  font-size: 14px;
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 6px;
+  stroke-linejoin: round;
+}
+
+.diagram line {
+  stroke: var(--fg);
+  stroke-width: 1.3;
+}
+
+.diagram .head {
+  fill: var(--fg);
+}
+
+.diagram .group {
+  fill: none;
+  stroke: #2f81f7;
+  stroke-width: 1.5;
+  stroke-dasharray: 6 4;
+}
+
+.diagram .p1 {
+  fill: var(--fg);
+  opacity: 0.85;
+}
+
+.diagram .p2 {
+  fill: var(--muted);
+}
+
+.muted {
+  color: var(--muted);
+}

@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { prefix, type Lang } from '../i18n';
+
+interface Props {
+  cases: CollectionEntry<'pages'>[];
+  lang: Lang;
+}
+const { cases, lang } = Astro.props;
+const sorted = cases.toSorted((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+---
+
+<div class="cards">
+  {
+    sorted.map((c) => (
+      <a class="card" href={`${prefix(lang)}/cases/${c.id.split('/').pop()}`}>
+        <h3>{c.data.title}</h3>
+        <p>{c.data.description}</p>
+        <p class="metric">{c.data.metric}</p>
+      </a>
+    ))
+  }
+</div>

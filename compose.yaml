@@ -1,0 +1,18 @@
+# Homologação local: o mesmo build que vai para produção, servido só em http://localhost:4321.
+# Node 24, igual ao CI. Sem tokens nem variáveis: o beacon do Web Analytics fica de fora do HTML.
+# Uso: docker compose up   ·   depois de editar: Ctrl+C e docker compose up de novo
+services:
+  site:
+    image: node:24-alpine
+    working_dir: /app/site
+    volumes:
+      - .:/app
+      # node_modules do Linux separado do Windows (binários nativos diferentes)
+      - node_modules:/app/site/node_modules
+    command: sh -c "npm ci && npm run check && npm run build && npx astro preview --host 0.0.0.0"
+    ports:
+      # 127.0.0.1: só esta máquina acessa, nem a rede local
+      - '127.0.0.1:4321:4321'
+
+volumes:
+  node_modules:

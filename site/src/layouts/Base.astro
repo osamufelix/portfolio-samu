@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+import { links, otherLangPath, prefix, ui, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+}
+const { lang, title, description } = Astro.props;
+const t = ui[lang];
+const p = prefix(lang);
+// Token do Web Analytics (output do Terraform), injetado no build de produção pelo CI.
+const beacon = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
+---
+
+<!doctype html>
+<html lang={t.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" hreflang={lang === 'pt' ? 'en' : 'pt-BR'} href={otherLangPath(lang, Astro.url.pathname)} />
+    <script is:inline>
+      try {
+        const saved = localStorage.getItem('theme');
+        if (saved) document.documentElement.dataset.theme = saved;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <header class="top">
+      <a class="lang" href={otherLangPath(lang, Astro.url.pathname)} hreflang={lang === 'pt' ? 'en' : 'pt-BR'} title={t.switchLabel}>
+        [{lang === 'pt' ? <><b>BR</b>|EN</> : <>BR|<b>EN</b></>}]
+      </a>
+      <a class="home" href={p || '/'}>~/samuel-felix</a>
+      <nav>
+        <a href={`${p}/cases`}>{t.cases}</a>
+        <a href={`${p}/como-foi-feito`}>{t.howBuilt}</a>
+      </nav>
+      <button class="theme" type="button" aria-label={t.theme} title={t.theme}>◐</button>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <span>{t.footer}</span>
+      <a href={links.github}>GitHub</a>
+      <a href={links.linkedin}>LinkedIn</a>
+      <a href={links.repo}>repo</a>
+    </footer>
+    <script is:inline>
+      document.querySelector('.theme').addEventListener('click', () => {
+        const root = document.documentElement;
+        const dark = (root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')) === 'dark';
+        root.dataset.theme = dark ? 'light' : 'dark';
+        try {
+          localStorage.setItem('theme', root.dataset.theme);
+        } catch {}
+      });
+    </script>
+    {
+      beacon && (
+        <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: beacon })} />
+      )
+    }
+  </body>
+</html>
