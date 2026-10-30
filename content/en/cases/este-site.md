@@ -8,7 +8,7 @@ tags: [Astro, Cloudflare Pages, Terraform, GitHub Actions]
 
 ## Summary
 
-This site is a project like the others: it has recorded decisions, a pipeline, infrastructure as code and stated limits. It's all in the [repository](https://github.com/osamufelix/portifolio-samu) for you to check.
+This site is a project like the others: it has recorded decisions, a pipeline, infrastructure as code and stated limits. It's all in the [repository](https://github.com/osamufelix/portfolio-samu) for you to check.
 
 <!-- PENDENTE: numbers measured after the first deploy (pipeline time, home page weight in KB) -->
 
@@ -32,10 +32,10 @@ All page text lives in Markdown, in a `content/` folder separate from the site c
 
 Each decision has an ADR (architecture decision record, in Portuguese) with context, alternatives and consequences:
 
-- [ADR 001: Astro and Markdown as the single source](https://github.com/osamufelix/portifolio-samu/blob/main/docs/adr/001-astro-e-markdown.md). The same text serves the site and, later, the chatbot.
-- [ADR 002: Cloudflare and the exit plan](https://github.com/osamufelix/portifolio-samu/blob/main/docs/adr/002-cloudflare-e-plano-de-saida.md). Zero cost and simplicity, traded for depending on one vendor. The ADR spells out what to replace if I need to leave.
-- [ADR 003: Terraform with remote state](https://github.com/osamufelix/portifolio-samu/blob/main/docs/adr/003-terraform.md). Apply runs locally; CI only validates.
-- [ADR 004: deploying from GitHub Actions](https://github.com/osamufelix/portifolio-samu/blob/main/docs/adr/004-deploy-pelo-actions.md). The pipeline stays visible and versioned instead of hidden in the Pages Git integration.
+- [ADR 001: Astro and Markdown as the single source](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/001-astro-e-markdown.md). The same text serves the site and, later, the chatbot.
+- [ADR 002: Cloudflare and the exit plan](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/002-cloudflare-e-plano-de-saida.md). Zero cost and simplicity, traded for depending on one vendor. The ADR spells out what to replace if I need to leave.
+- [ADR 003: Terraform with remote state](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/003-terraform.md). Apply runs locally; CI only validates.
+- [ADR 004: deploying from GitHub Actions](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/004-deploy-pelo-actions.md). The pipeline stays visible and versioned instead of hidden in the Pages Git integration.
 
 ## Pipeline
 
@@ -58,7 +58,7 @@ The pending-content gate exists because some numbers in the cases depend on mate
 
 ## Limits
 
-- Depends on Cloudflare and on free tiers that can change. The [exit plan](https://github.com/osamufelix/portifolio-samu/blob/main/docs/adr/002-cloudflare-e-plano-de-saida.md) is written down.
+- Depends on Cloudflare and on free tiers that can change. The [exit plan](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/002-cloudflare-e-plano-de-saida.md) is written down.
 - Content in Portuguese and English only.
 - Still on `*.pages.dev`, with no custom domain.
 

@@ -8,7 +8,7 @@ tags: [Astro, Cloudflare Pages, Terraform, GitHub Actions]
 
 ## Resumo
 
-Este site é um projeto como os outros: tem decisões registradas, pipeline, infraestrutura como código e limites declarados. Tudo está no [repositório](https://github.com/osamufelix/portifolio-samu) para conferir.
+Este site é um projeto como os outros: tem decisões registradas, pipeline, infraestrutura como código e limites declarados. Tudo está no [repositório](https://github.com/osamufelix/portfolio-samu) para conferir.
 
 <!-- PENDENTE: números medidos depois do primeiro deploy (tempo do pipeline, peso da home em KB) -->
 
@@ -32,10 +32,10 @@ O texto de todas as páginas fica em Markdown, numa pasta `content/` separada do
 
 Cada decisão tem um ADR (registro de decisão de arquitetura) com contexto, alternativas e consequências:
 
-- [ADR 001: Astro e Markdown como fonte única](https://github.com/osamufelix/portifolio-samu/blob/main/docs/adr/001-astro-e-markdown.md). O mesmo texto serve o site e, depois, o chatbot.
-- [ADR 002: Cloudflare e o plano de saída](https://github.com/osamufelix/portifolio-samu/blob/main/docs/adr/002-cloudflare-e-plano-de-saida.md). Custo zero e simplicidade, em troca de dependência de um fornecedor. O ADR descreve o que trocar se for preciso sair.
-- [ADR 003: Terraform com state remoto](https://github.com/osamufelix/portifolio-samu/blob/main/docs/adr/003-terraform.md). O apply é local; o CI só valida.
-- [ADR 004: deploy pelo GitHub Actions](https://github.com/osamufelix/portifolio-samu/blob/main/docs/adr/004-deploy-pelo-actions.md). O pipeline fica visível e versionado, em vez de escondido na integração Git do Pages.
+- [ADR 001: Astro e Markdown como fonte única](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/001-astro-e-markdown.md). O mesmo texto serve o site e, depois, o chatbot.
+- [ADR 002: Cloudflare e o plano de saída](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/002-cloudflare-e-plano-de-saida.md). Custo zero e simplicidade, em troca de dependência de um fornecedor. O ADR descreve o que trocar se for preciso sair.
+- [ADR 003: Terraform com state remoto](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/003-terraform.md). O apply é local; o CI só valida.
+- [ADR 004: deploy pelo GitHub Actions](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/004-deploy-pelo-actions.md). O pipeline fica visível e versionado, em vez de escondido na integração Git do Pages.
 
 ## Pipeline
 
@@ -58,7 +58,7 @@ A trava de pendências existe porque alguns números dos cases dependem de mater
 
 ## Limites
 
-- Depende do Cloudflare e de limites gratuitos que podem mudar. O [plano de saída](https://github.com/osamufelix/portifolio-samu/blob/main/docs/adr/002-cloudflare-e-plano-de-saida.md) está escrito.
+- Depende do Cloudflare e de limites gratuitos que podem mudar. O [plano de saída](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/002-cloudflare-e-plano-de-saida.md) está escrito.
 - Conteúdo só em português e inglês.
 - Ainda em `*.pages.dev`, sem domínio próprio.
 

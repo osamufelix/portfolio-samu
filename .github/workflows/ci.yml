@@ -34,7 +34,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: --root-dir ${{ github.workspace }}/site/dist --no-progress site/dist
+          # O LinkedIn responde 999 a qualquer robô; o link é conferido à mão.
+          args: --root-dir ${{ github.workspace }}/site/dist --no-progress --exclude 'linkedin\.com' site/dist
           fail: true
 
       - uses: hashicorp/setup-terraform@v3

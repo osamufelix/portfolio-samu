@@ -27,10 +27,10 @@ The infrastructure rarely changes. So `terraform apply` runs on my machine, and 
 
 | ADR | Decision |
 |---|---|
-| [001](https://github.com/osamufelix/portifolio-samu/blob/main/docs/adr/001-astro-e-markdown.md) | Astro, with the text in Markdown in its own folder |
-| [002](https://github.com/osamufelix/portifolio-samu/blob/main/docs/adr/002-cloudflare-e-plano-de-saida.md) | Cloudflare on the free plan, with a written exit plan |
-| [003](https://github.com/osamufelix/portifolio-samu/blob/main/docs/adr/003-terraform.md) | Terraform with remote state and local apply |
-| [004](https://github.com/osamufelix/portifolio-samu/blob/main/docs/adr/004-deploy-pelo-actions.md) | Deploy from GitHub Actions, not the Pages Git integration |
+| [001](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/001-astro-e-markdown.md) | Astro, with the text in Markdown in its own folder |
+| [002](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/002-cloudflare-e-plano-de-saida.md) | Cloudflare on the free plan, with a written exit plan |
+| [003](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/003-terraform.md) | Terraform with remote state and local apply |
+| [004](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/004-deploy-pelo-actions.md) | Deploy from GitHub Actions, not the Pages Git integration |
 
 ## Stated limits
 
@@ -40,4 +40,4 @@ The infrastructure rarely changes. So `terraform apply` runs on my machine, and 
 
 ## Code
 
-It's all at [github.com/osamufelix/portifolio-samu](https://github.com/osamufelix/portifolio-samu).
+It's all at [github.com/osamufelix/portfolio-samu](https://github.com/osamufelix/portfolio-samu).

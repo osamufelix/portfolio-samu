@@ -6,8 +6,11 @@ interface Props {
   lang: Lang;
   title: string;
   description: string;
+  // Página sem equivalente no outro idioma (404) informa para onde a troca BR/EN leva.
+  altPath?: string;
 }
 const { lang, title, description } = Astro.props;
+const alt = Astro.props.altPath ?? otherLangPath(lang, Astro.url.pathname);
 const t = ui[lang];
 const p = prefix(lang);
 // Token do Web Analytics (output do Terraform), injetado no build de produção pelo CI.
@@ -22,7 +25,7 @@ const beacon = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate" hreflang={lang === 'pt' ? 'en' : 'pt-BR'} href={otherLangPath(lang, Astro.url.pathname)} />
+    <link rel="alternate" hreflang={lang === 'pt' ? 'en' : 'pt-BR'} href={alt} />
     <script is:inline>
       try {
         const saved = localStorage.getItem('theme');
@@ -32,7 +35,7 @@ const beacon = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
   </head>
   <body>
     <header class="top">
-      <a class="lang" href={otherLangPath(lang, Astro.url.pathname)} hreflang={lang === 'pt' ? 'en' : 'pt-BR'} title={t.switchLabel}>
+      <a class="lang" href={alt} hreflang={lang === 'pt' ? 'en' : 'pt-BR'} title={t.switchLabel}>
         [{lang === 'pt' ? <><b>BR</b>|EN</> : <>BR|<b>EN</b></>}]
       </a>
       <a class="home" href={p || '/'}>~/samuel-felix</a>

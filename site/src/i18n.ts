@@ -15,7 +15,7 @@ export const otherLangPath = (lang: Lang, path: string) =>
 export const links = {
   github: 'https://github.com/osamufelix',
   linkedin: 'https://www.linkedin.com/in/samuelfelix',
-  repo: 'https://github.com/osamufelix/portifolio-samu',
+  repo: 'https://github.com/osamufelix/portfolio-samu',
 };
 
 export const ui = {
