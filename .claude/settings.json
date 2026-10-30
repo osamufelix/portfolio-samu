@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "deny": [
+      "Edit(**/CLAUDE.md)",
+      "Edit(**/.claude/settings*.json)",
+      "Edit(**/.claude/hooks/**)",
+      "Edit(**/.claude/skills/**)",
+      "Edit(**/.claude/agents/**)",
+      "Edit(~/.claude/CLAUDE.md)",
+      "Edit(~/.claude/settings*.json)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'CAVEMAN MODE ACTIVE - level: full'; awk '/^---$/{f++; next} f>=2' \"$HOME/.claude/skills/caveman/SKILL.md\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/protect-rules.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}
