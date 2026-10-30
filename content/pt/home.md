@@ -1,6 +1,5 @@
 ---
 title: Samuel Felix
-# PENDENTE: frase de posicionamento final (repetir no README e no headline do LinkedIn)
 description: DevOps/SRE que entrega com automação, testes e agentes de IA sob controle.
 stack:
   - Docker Compose

@@ -6,8 +6,6 @@ metric: 475 + 385 testes · p95 de 20 ms com 100 usuários
 tags: [Node.js, React, PostgreSQL, Docker Compose, Azure, GitHub Actions, k6, OWASP ZAP, Semgrep, Trivy, Claude Code]
 ---
 
-<!-- PENDENTE: monografia atualizada (PDF em site/public/docs/, link em "Links" e números da pesquisa) -->
-
 ## Resumo
 
 O Guardião Impacta foi um app de celular (PWA) que ensinava segurança da informação a quem não trabalha com TI, com aulas curtas, trivia, pontos, conquistas e ranking. Foi o TCC do meu grupo em Ciência da Computação e ficou em produção durante a coleta de dados da pesquisa, encerrada em 02/11/2026. Depois disso, o app foi desligado.
@@ -16,7 +14,7 @@ O Guardião Impacta foi um app de celular (PWA) que ensinava segurança da infor
 |---|---|
 | Testes automatizados | 475 na API (100% das linhas) e 385 na interface (99,8%) |
 | Teste de carga | 100 usuários simultâneos por 3 minutos: nenhuma falha, 95% das respostas em até 20 ms; no estresse com 1.000, até 41 ms |
-| Segurança | 7 falhas achadas na revisão de código e corrigidas; OWASP ZAP sem nenhuma falha depois |
+| Segurança | 6 problemas achados na revisão de código e corrigidos; OWASP ZAP sem nenhuma falha depois |
 | Entrega | cada push no `main` com a CI verde ia sozinho para produção, sem porta SSH aberta |
 
 ## Contexto
@@ -127,17 +125,14 @@ A monografia declara o uso de IA generativa no desenvolvimento e na revisão do 
   - É carga sintética, não tráfego real. Com as pausas entre cliques, os 1.000 usuários geraram cerca de 146 requisições por segundo.
   - Os resultados brutos não estão publicados; a rodada de 100 usuários está descrita na monografia.
 
-<!-- PENDENTE: teste de mutação (número + link para o relatório) -->
-
 ## Segurança
 
 Em 01/10/2026, no meio do desenvolvimento, fiz uma rodada de segurança com o Claude Code: revisão do código da API e da interface, seguida de quatro scanners contra a stack de produção rodando localmente.
 
-**A revisão de código achou 7 problemas, todos corrigidos com teste:**
+**A revisão de código achou 6 problemas, todos corrigidos com testes no commit [`1b8948c`](https://github.com/osamufelix/guardiao-impacta/commit/1b8948c):**
 
 | Gravidade | Problema | Correção |
 |---|---|---|
-| Média | Errar uma questão mostrava a resposta certa, e a tentativa seguinte pontuava: dava para chegar ao topo do ranking sem saber nada | Só a primeira tentativa de cada questão pontua |
 | Média | O HTML de cada aula, com o gabarito, era público e sem login | A rota passou a servir só imagens |
 | Baixa-média | Um evento de telemetria começando com `-` virava fórmula no CSV exportado para o Excel | Escape de tudo que começa com `-` e não é número |
 | Baixa | Sem SMTP em produção, o link de troca de senha ia para o log | Em produção, o e-mail é descartado sem registrar o link |
@@ -155,9 +150,9 @@ Em 01/10/2026, no meio do desenvolvimento, fiz uma rodada de segurança com o Cl
 | Trivy | dependências e imagens | 0 vulnerabilidades nas dependências do app; 19 CVEs na imagem da API, todas no npm embutido na imagem do Node |
 | Gitleaks | segredos | 1 alerta, falso positivo (`JWT_SECRET=` vazio no `.env.example`) |
 
-O npm saiu da imagem de produção da API, e o Trivy passou a achar 0 CVEs nela. As CVEs da imagem do Caddy estavam no binário dele; o deploy passou a reconstruir as imagens com `--pull` a cada versão. A rodada também achou um bug de disponibilidade: com o banco fora do ar, a API caía em vez de responder 503. Isso foi corrigido.
+O npm saiu da imagem de produção da API ([`0dcca2d`](https://github.com/osamufelix/guardiao-impacta/commit/0dcca2d)), e o Trivy passou a achar 0 CVEs nela. As CVEs da imagem do Caddy estavam no binário dele; o deploy passou a reconstruir as imagens com `--pull` a cada versão. A rodada também achou um bug de disponibilidade: com o banco fora do ar, a API caía em vez de responder 503. Isso foi corrigido em [`cb715eb`](https://github.com/osamufelix/guardiao-impacta/commit/cb715eb).
 
-Limites: o ZAP testou só as páginas públicas, porque não faz login sozinho. Os relatórios em HTML e JSON se perderam com a pasta temporária, e os números acima vêm do registro da sessão. Os relatórios não estão publicados.
+Limites: o ZAP testou só as páginas públicas, porque não faz login sozinho. Os relatórios em HTML e JSON se perderam com a pasta temporária, e os números acima vêm do registro da sessão. Os relatórios não estão publicados; as correções estão nos commits linkados.
 
 ## Pesquisa e privacidade
 
@@ -188,4 +183,4 @@ Limites: o ZAP testou só as páginas públicas, porque não faz login sozinho. 
 ## Links
 
 - Código: [github.com/osamufelix/guardiao-impacta](https://github.com/osamufelix/guardiao-impacta)
-- Monografia: em breve
+- Monografia (PDF): [Gamificação em security awareness](/docs/monografia-guardiao-impacta.pdf)

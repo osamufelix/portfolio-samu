@@ -1,6 +1,5 @@
 ---
 title: Samuel Felix
-# PENDENTE: final positioning statement (same as README and LinkedIn headline)
 description: DevOps/SRE who ships with automation, tests and AI agents under control.
 stack:
   - Docker Compose

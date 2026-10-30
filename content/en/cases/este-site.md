@@ -10,7 +10,11 @@ tags: [Astro, Cloudflare Pages, Terraform, GitHub Actions]
 
 This site is a project like the others: it has recorded decisions, a pipeline, infrastructure as code and stated limits. It's all in the [repository](https://github.com/osamufelix/portfolio-samu) for you to check.
 
-<!-- PENDENTE: numbers measured after the first deploy (pipeline time, home page weight in KB) -->
+| | |
+|---|---|
+| Home page weight | 7.0 KB (2.8 KB compressed), with inlined CSS and no framework JavaScript |
+| CI checks | about 30 s (check, build, links and Terraform) |
+| Cost | US$ 0 |
 
 ## Why it exists
 
@@ -66,7 +70,6 @@ The pending-content gate exists because some numbers in the cases depend on mate
 
 **Found along the way**
 
-- Mutation testing report in the Guardião Impacta case.
 - Final version of the Guardião Impacta thesis.
 - Higher-resolution screenshots of Guardião Impacta.
 - A custom domain instead of `*.pages.dev`.

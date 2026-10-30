@@ -1,6 +1,5 @@
 # Samuel Felix: portfólio
 
-<!-- PENDENTE: frase de posicionamento final (igual à home e ao headline do LinkedIn) -->
 > DevOps/SRE que entrega com automação, testes e agentes de IA sob controle.
 
 Site: https://portfolio-samuel.pages.dev

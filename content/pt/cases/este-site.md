@@ -10,7 +10,11 @@ tags: [Astro, Cloudflare Pages, Terraform, GitHub Actions]
 
 Este site é um projeto como os outros: tem decisões registradas, pipeline, infraestrutura como código e limites declarados. Tudo está no [repositório](https://github.com/osamufelix/portfolio-samu) para conferir.
 
-<!-- PENDENTE: números medidos depois do primeiro deploy (tempo do pipeline, peso da home em KB) -->
+| | |
+|---|---|
+| Peso da home | 7,0 KB (2,8 KB comprimida), com o CSS embutido e sem JavaScript de framework |
+| Verificação no CI | cerca de 30 s (check, build, links e Terraform) |
+| Custo | US$ 0 |
 
 ## Por que existe
 
@@ -66,7 +70,6 @@ A trava de pendências existe porque alguns números dos cases dependem de mater
 
 **Encontrado no caminho**
 
-- Relatório de teste de mutação no case do Guardião Impacta.
 - Versão final da monografia do Guardião Impacta.
 - Prints novos do Guardião Impacta em resolução maior.
 - Domínio próprio no lugar do `*.pages.dev`.

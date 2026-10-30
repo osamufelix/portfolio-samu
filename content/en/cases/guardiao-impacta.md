@@ -6,8 +6,6 @@ metric: 475 + 385 tests · p95 of 20 ms with 100 users
 tags: [Node.js, React, PostgreSQL, Docker Compose, Azure, GitHub Actions, k6, OWASP ZAP, Semgrep, Trivy, Claude Code]
 ---
 
-<!-- PENDENTE: updated thesis (PDF in site/public/docs/, link under "Links" and study numbers) -->
-
 ## Summary
 
 Guardião Impacta ("Impacta Guardian") was a mobile web app (PWA) that taught information security to people who don't work in IT, through short lessons, trivia, points, achievements and a leaderboard. It was my group's capstone project for a Computer Science degree, and it ran in production while the study collected data, until November 2, 2026. The app was then shut down.
@@ -16,7 +14,7 @@ Guardião Impacta ("Impacta Guardian") was a mobile web app (PWA) that taught in
 |---|---|
 | Automated tests | 475 on the API (100% line coverage) and 385 on the UI (99.8%) |
 | Load test | 100 concurrent users for 3 minutes: zero failures, 95% of responses within 20 ms; up to 41 ms in a 1,000-user stress test |
-| Security | 7 issues found in code review and fixed; OWASP ZAP with zero failures afterwards |
+| Security | 6 issues found in code review and fixed; OWASP ZAP with zero failures afterwards |
 | Delivery | every push to `main` with a green CI went to production on its own, with no SSH port open |
 
 ## Context
@@ -128,17 +126,14 @@ The thesis discloses the use of generative AI in development and in proofreading
   - This is synthetic load, not real traffic. With the pauses between clicks, 1,000 users produced about 146 requests per second.
   - The raw results are not published; the 100-user run is described in the thesis.
 
-<!-- PENDENTE: mutation testing (number + link to the report) -->
-
 ## Security
 
 On October 1, 2026, midway through development, I ran a security pass with Claude Code: a review of the API and UI code, followed by four scanners against the production stack running locally.
 
-**The code review found 7 issues, all fixed with tests:**
+**The code review found 6 issues, all fixed with tests in commit [`1b8948c`](https://github.com/osamufelix/guardiao-impacta/commit/1b8948c):**
 
 | Severity | Issue | Fix |
 |---|---|---|
-| Medium | A wrong answer revealed the right one, and the next attempt scored: you could top the leaderboard knowing nothing | Only the first attempt at each question scores |
 | Medium | Each lesson's HTML, answer key included, was public with no login | The route now serves images only |
 | Low-medium | A telemetry event starting with `-` became a formula in the CSV exported to Excel | Anything starting with `-` that isn't a number gets escaped |
 | Low | With SMTP off in production, the password reset link went to the log | In production the email is dropped without logging the link |
@@ -156,9 +151,9 @@ On October 1, 2026, midway through development, I ran a security pass with Claud
 | Trivy | dependencies and images | 0 vulnerabilities in the app's dependencies; 19 CVEs in the API image, all in the npm bundled with the Node image |
 | Gitleaks | secrets | 1 alert, a false positive (empty `JWT_SECRET=` in `.env.example`) |
 
-npm was removed from the API's production image, and Trivy then found 0 CVEs in it. The Caddy image's CVEs were in its binary; the deploy now rebuilds images with `--pull` on every release. The pass also caught an availability bug: with the database down, the API crashed instead of returning 503. That was fixed.
+npm was removed from the API's production image ([`0dcca2d`](https://github.com/osamufelix/guardiao-impacta/commit/0dcca2d)), and Trivy then found 0 CVEs in it. The Caddy image's CVEs were in its binary; the deploy now rebuilds images with `--pull` on every release. The pass also caught an availability bug: with the database down, the API crashed instead of returning 503. That was fixed in [`cb715eb`](https://github.com/osamufelix/guardiao-impacta/commit/cb715eb).
 
-Limits: ZAP only tested public pages, since it can't log in on its own. The HTML and JSON reports were lost with the temporary folder, and the numbers above come from the session log. The reports are not published.
+Limits: ZAP only tested public pages, since it can't log in on its own. The HTML and JSON reports were lost with the temporary folder, and the numbers above come from the session log. The reports are not published; the fixes are in the linked commits.
 
 ## Study and privacy
 
@@ -191,4 +186,4 @@ The app's interface is in Portuguese.
 ## Links
 
 - Code: [github.com/osamufelix/guardiao-impacta](https://github.com/osamufelix/guardiao-impacta)
-- Thesis (in Portuguese): coming soon
+- Thesis (PDF, in Portuguese): [Gamificação em security awareness](/docs/monografia-guardiao-impacta.pdf)
