@@ -1,6 +1,6 @@
 ---
 title: How it is built
-description: Quick reference for this site's architecture, pipeline and decisions.
+description: Parts, pipeline and roadmap of this site.
 ---
 
 ## Parts
@@ -17,27 +17,38 @@ description: Quick reference for this site's architecture, pipeline and decision
 
 ## Pipeline
 
-1. **PR or push:** `astro check`, `astro build`, link check and `terraform validate`.
-2. **Push to `main`:** if no content is marked as pending, the build goes to production with `wrangler pages deploy`.
-3. **Staging:** `docker compose up` serves the production build on `localhost`. There is no public preview URL.
+```text
+PR and push to main
+  filtro (filter)             only docs, README and configs? nothing runs and ok passes
+  verificar (verify)          npm ci, astro check, build and lychee (links)
+  terraform                   fmt + validate, in parallel with verify
+  ok                          the only required check: aggregates the result
 
-The infrastructure rarely changes. So `terraform apply` runs on my machine, and CI only checks that the code is still valid.
+push to main, all green
+  deploy                      blocked if there are unconfirmed numbers + wrangler pages deploy of the same dist
+```
 
-## Decisions (ADRs, in Portuguese)
+- `main` deploys straight to production, so a ruleset (a rule that protects the branch) requires a PR and the `ok` check.
+- Actions are pinned by SHA; Dependabot opens a weekly PR for actions and npm.
+- No preview URL: staging runs on my machine with `docker compose up`, on the same Node version as CI and reachable only from `localhost`.
+- `terraform apply` runs on my machine; CI only checks that the code is still valid.
 
-| ADR | Decision |
-|---|---|
-| [001](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/001-astro-e-markdown.md) | Astro, with the text in Markdown in its own folder |
-| [002](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/002-cloudflare-e-plano-de-saida.md) | Cloudflare on the free plan, with a written exit plan |
-| [003](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/003-terraform.md) | Terraform with remote state and local apply |
-| [004](https://github.com/osamufelix/portfolio-samu/blob/main/docs/adr/004-deploy-pelo-actions.md) | Deploy from GitHub Actions, not the Pages Git integration |
+## Roadmap
 
-## Stated limits
+**Done**
 
-- No server and no database: the site stores nothing about visitors.
-- Depends on Cloudflare; ADR 002 describes how to leave.
-- Content in Portuguese and English.
+- [x] Infrastructure as code with Terraform and remote state
+- [x] CI with change filtering, link checking and a ruleset requiring a PR
 
-## Code
+**Up next**
 
-It's all at [github.com/osamufelix/portfolio-samu](https://github.com/osamufelix/portfolio-samu).
+- [ ] A custom domain instead of `*.pages.dev`
+- [ ] **Observability and metrics:** availability, performance and what the pipeline delivers, measured and open to browse
+
+**Later: chatbot**
+
+A chat about the cases, answering from these same texts. The focus is on how it's run and evaluated: evals in CI that grow with every real failure, abuse protection (invisible captcha, rate limiting, a daily usage cap), a kill switch (an emergency off button) and zero cost.
+
+**Further ahead**
+
+- [ ] New cases

@@ -16,7 +16,14 @@ const sorted = cases.toSorted((a, b) => (a.data.order ?? 99) - (b.data.order ?? 
       <a class="card" href={`${prefix(lang)}/cases/${c.id.split('/').pop()}`}>
         <h3>{c.data.title}</h3>
         <p>{c.data.description}</p>
-        <p class="metric">{c.data.metric}</p>
+        <div class="metrics">
+          {c.data.metrics?.map((m) => (
+            <p class="metric">
+              {m.value && <strong>{m.value}</strong>}
+              <span>{m.label}</span>
+            </p>
+          ))}
+        </div>
       </a>
     ))
   }

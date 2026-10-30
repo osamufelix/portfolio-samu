@@ -13,7 +13,7 @@ const pages = defineCollection({
     stack: z.array(z.string()).optional(),
     // só nos cases
     order: z.number().optional(),
-    metric: z.string().optional(),
+    metrics: z.array(z.object({ value: z.string().optional(), label: z.string() })).optional(),
     tags: z.array(z.string()).optional(),
   }),
 });
