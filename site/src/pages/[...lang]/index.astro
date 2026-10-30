@@ -2,7 +2,7 @@
 import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import CaseCards from '../../components/CaseCards.astro';
-import { langPaths, prefix, ui, type Lang } from '../../i18n';
+import { langPaths, links, prefix, ui, type Lang } from '../../i18n';
 
 export const getStaticPaths = langPaths;
 
@@ -19,11 +19,19 @@ const cases = await getCollection('pages', (e) => e.id.startsWith(`${lang}/cases
   <p class="lead">{home.data.description}</p>
   <Content />
 
+  <p class="prompt">contact</p>
+  <p class="contact">
+    <a href={`mailto:${links.email}`}>email</a>
+    <a href={links.linkedin}>linkedin</a>
+    <a href={links.github}>github</a>
+    <a href={t.cvFile}>{t.cvLabel}</a>
+  </p>
+
   <p class="prompt">ls cases/</p>
   <CaseCards cases={cases} lang={lang} />
   <p><a href={`${prefix(lang)}/cases`}>{t.allCases} →</a></p>
 
   <p class="prompt">cat stack.txt</p>
   <p class="muted">{t.stack}:</p>
-  <ul class="tags">{home.data.stack?.map((s) => <li>{s}</li>)}</ul>
+  <ul class="tags stack">{home.data.stack?.map((s) => <li>{s}</li>)}</ul>
 </Base>
