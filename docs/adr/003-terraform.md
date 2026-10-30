@@ -18,7 +18,7 @@ Este arquivo Terraform também serve como estudo de IaC.
 
 - State no HCP Terraform, com o workspace em execution mode **Local**: o `terraform apply` roda na minha máquina e só o state fica remoto.
 - O CI não aplica nada. Ele roda `terraform fmt -check` e `terraform validate` em todo PR.
-- O token da Cloudflare usado no apply tem só as permissões necessárias (Pages: Edit e Account Analytics: Edit) e não fica no repositório.
+- O token da Cloudflare usado no apply tem só as permissões necessárias (Pages: Edit e Account Settings: Edit, que é a permissão exigida para criar o site do Web Analytics) e não fica no repositório.
 
 ## Consequências
 

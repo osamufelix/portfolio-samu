@@ -6,7 +6,6 @@ metric: 475 + 385 tests · p95 of 20 ms with 100 users
 tags: [Node.js, React, PostgreSQL, Docker Compose, Azure, GitHub Actions, k6, OWASP ZAP, Semgrep, Trivy, Claude Code]
 ---
 
-<!-- PENDENTE: replace ENRICO741/nodeLogin links with the copy of the repo in my account -->
 <!-- PENDENTE: updated thesis (PDF in site/public/docs/, link under "Links" and study numbers) -->
 
 ## Summary
@@ -46,7 +45,7 @@ The capstone was a five-person group project. **My part was building the whole a
 
 **Versioned schema.** The database was defined by numbered SQL migrations, applied in order when the API started. An applied migration was never edited; every change became a new file.
 
-Details in the [project README](https://github.com/ENRICO741/nodeLogin#backend) (in Portuguese).
+Details in the [project README](https://github.com/osamufelix/guardiao-impacta#backend) (in Portuguese).
 
 ## How content was added
 
@@ -88,11 +87,11 @@ $ docker compose exec api npm run importar-aulas -- --validar
 
 **Trivia questions** were added through the app's admin area, with no code: prompt, options, explanation, level (easy, medium or hard) and a reference lesson, which became a "Review lesson" link when someone answered wrong.
 
-That made content versioned and tested just like code, and lesson authors never had to touch the database. The full guide is in [conteudo/README.md](https://github.com/ENRICO741/nodeLogin/blob/main/conteudo/README.md) (in Portuguese).
+That made content versioned and tested just like code, and lesson authors never had to touch the database. The full guide is in [conteudo/README.md](https://github.com/osamufelix/guardiao-impacta/blob/main/conteudo/README.md) (in Portuguese).
 
 ## Continuous delivery
 
-Every push ran this sequence on [GitHub Actions](https://github.com/ENRICO741/nodeLogin/blob/main/.github/workflows/ci.yml):
+Every push ran this sequence on [GitHub Actions](https://github.com/osamufelix/guardiao-impacta/blob/main/.github/workflows/ci.yml):
 
 ```text
 lint and format           eslint + prettier
@@ -113,10 +112,10 @@ deploy (main only)        Azure login via OIDC → Run Command on the VM → dep
 
 I used Claude Code as a development agent. An agent with terminal and cloud access needs clear limits, and those limits were versioned in the repository:
 
-- **What it could not do** ([`.claude/settings.json`](https://github.com/ENRICO741/nodeLogin/blob/main/.claude/settings.json)): read `.env` files, keys or state files; log in to Azure or request tokens; change roles and permissions; delete resource groups or VMs; `git push --force` and `git reset --hard`; edit its own rules.
+- **What it could not do** ([`.claude/settings.json`](https://github.com/osamufelix/guardiao-impacta/blob/main/.claude/settings.json)): read `.env` files, keys or state files; log in to Azure or request tokens; change roles and permissions; delete resource groups or VMs; `git push --force` and `git reset --hard`; edit its own rules.
 - **What it had to ask first:** `git push`, Azure deployments, VM and network commands, `ssh` and `curl`.
-- **Extra safety net:** a [hook](https://github.com/ENRICO741/nodeLogin/blob/main/.claude/hooks/block-dangerous.sh) ran before every command and blocked destructive patterns (`rm -rf` on root or home, `az group delete`, `terraform destroy`), even if they slipped past the rules above.
-- **Least privilege in the cloud:** the agent used a service principal scoped to the capstone's resource group only. [`CLAUDE.md`](https://github.com/ENRICO741/nodeLogin/blob/main/CLAUDE.md) required a `what-if` before any deployment and told the agent to stop if the active account wasn't that service principal.
+- **Extra safety net:** a [hook](https://github.com/osamufelix/guardiao-impacta/blob/main/.claude/hooks/block-dangerous.sh) ran before every command and blocked destructive patterns (`rm -rf` on root or home, `az group delete`, `terraform destroy`), even if they slipped past the rules above.
+- **Least privilege in the cloud:** the agent used a service principal scoped to the capstone's resource group only. [`CLAUDE.md`](https://github.com/osamufelix/guardiao-impacta/blob/main/CLAUDE.md) required a `what-if` before any deployment and told the agent to stop if the active account wasn't that service principal.
 
 The thesis discloses the use of generative AI in development and in proofreading (section 1.6).
 
@@ -127,7 +126,7 @@ The thesis discloses the use of generative AI in development and in proofreading
   - **100 concurrent users for 3 minutes**, half new (sign-up and lesson track) and half with existing accounts: zero failures, and 95% of API responses within 20 ms (150 ms for login and sign-up).
   - **Stress test from 250 to 1,000** logged-in users, ramping in steps: p95 went from 21 ms to 41 ms. Of 59,262 requests, only 1 failed, blocked by the rate limiter.
   - This is synthetic load, not real traffic. With the pauses between clicks, 1,000 users produced about 146 requests per second.
-  <!-- PENDENTE: link to the published raw k6 results -->
+  - The raw results are not published; the 100-user run is described in the thesis.
 
 <!-- PENDENTE: mutation testing (number + link to the report) -->
 
@@ -159,7 +158,7 @@ On October 1, 2026, midway through development, I ran a security pass with Claud
 
 npm was removed from the API's production image, and Trivy then found 0 CVEs in it. The Caddy image's CVEs were in its binary; the deploy now rebuilds images with `--pull` on every release. The pass also caught an availability bug: with the database down, the API crashed instead of returning 503. That was fixed.
 
-Limits: ZAP only tested public pages, since it can't log in on its own. The HTML and JSON reports were lost with the temporary folder; what exists today was rebuilt from the session log. <!-- PENDENTE: link to the published reports -->
+Limits: ZAP only tested public pages, since it can't log in on its own. The HTML and JSON reports were lost with the temporary folder, and the numbers above come from the session log. The reports are not published.
 
 ## Study and privacy
 
@@ -191,5 +190,5 @@ The app's interface is in Portuguese.
 
 ## Links
 
-- Code: [github.com/ENRICO741/nodeLogin](https://github.com/ENRICO741/nodeLogin)
+- Code: [github.com/osamufelix/guardiao-impacta](https://github.com/osamufelix/guardiao-impacta)
 - Thesis (in Portuguese): coming soon

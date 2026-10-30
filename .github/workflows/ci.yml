@@ -11,8 +11,8 @@ jobs:
   verificar:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
@@ -57,7 +57,7 @@ jobs:
       group: deploy-producao
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # Número ou link que depende de material ainda não recebido fica marcado como PENDENTE e não vai para produção.
       - name: Trava de pendências

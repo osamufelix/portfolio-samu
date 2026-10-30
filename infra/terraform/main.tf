@@ -18,7 +18,7 @@ terraform {
   }
 }
 
-# Token lido de CLOUDFLARE_API_TOKEN (permissões: Pages Edit e Account Analytics Edit).
+# Token lido de CLOUDFLARE_API_TOKEN (permissões: Pages Edit e Account Settings Edit; o Web Analytics exige a segunda).
 provider "cloudflare" {}
 
 variable "account_id" {

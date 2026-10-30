@@ -6,7 +6,6 @@ metric: 475 + 385 testes · p95 de 20 ms com 100 usuários
 tags: [Node.js, React, PostgreSQL, Docker Compose, Azure, GitHub Actions, k6, OWASP ZAP, Semgrep, Trivy, Claude Code]
 ---
 
-<!-- PENDENTE: trocar os links de ENRICO741/nodeLogin pela cópia do repo na minha conta -->
 <!-- PENDENTE: monografia atualizada (PDF em site/public/docs/, link em "Links" e números da pesquisa) -->
 
 ## Resumo
@@ -46,7 +45,7 @@ O TCC foi feito por um grupo de cinco pessoas. **Minha parte foi o desenvolvimen
 
 **Schema versionado.** O banco era definido por migrations SQL numeradas, aplicadas em ordem quando a API subia. Migration já aplicada nunca era editada; toda mudança virava um arquivo novo.
 
-Detalhes no [README do projeto](https://github.com/ENRICO741/nodeLogin#backend).
+Detalhes no [README do projeto](https://github.com/osamufelix/guardiao-impacta#backend).
 
 ## Como adicionar conteúdo
 
@@ -87,11 +86,11 @@ $ docker compose exec api npm run importar-aulas -- --validar
 
 **Perguntas de trivia** eram cadastradas pela área de administração do app, sem código: enunciado, alternativas, explicação, nível (fácil, médio ou difícil) e a aula de referência, que virava o link "Rever na aula" quando a pessoa errava.
 
-Com isso, o conteúdo virou arquivo versionado e testado como o código, e quem escrevia aula não precisava mexer no banco. O guia completo está em [conteudo/README.md](https://github.com/ENRICO741/nodeLogin/blob/main/conteudo/README.md).
+Com isso, o conteúdo virou arquivo versionado e testado como o código, e quem escrevia aula não precisava mexer no banco. O guia completo está em [conteudo/README.md](https://github.com/osamufelix/guardiao-impacta/blob/main/conteudo/README.md).
 
 ## Entrega contínua
 
-Cada push rodava esta sequência no [GitHub Actions](https://github.com/ENRICO741/nodeLogin/blob/main/.github/workflows/ci.yml):
+Cada push rodava esta sequência no [GitHub Actions](https://github.com/osamufelix/guardiao-impacta/blob/main/.github/workflows/ci.yml):
 
 ```text
 lint e formatação         eslint + prettier
@@ -112,10 +111,10 @@ deploy (só no main)       login no Azure por OIDC → Run Command na VM → dep
 
 Usei o Claude Code como agente de desenvolvimento. Um agente com acesso ao terminal e à nuvem precisa de limites claros, e eles ficaram versionados no repositório:
 
-- **O que ele não podia fazer** ([`.claude/settings.json`](https://github.com/ENRICO741/nodeLogin/blob/main/.claude/settings.json)): ler `.env`, chaves e arquivos de state; fazer login no Azure ou pedir token; mexer em papéis e permissões; apagar grupo de recursos ou VM; `git push --force` e `git reset --hard`; editar as próprias regras.
+- **O que ele não podia fazer** ([`.claude/settings.json`](https://github.com/osamufelix/guardiao-impacta/blob/main/.claude/settings.json)): ler `.env`, chaves e arquivos de state; fazer login no Azure ou pedir token; mexer em papéis e permissões; apagar grupo de recursos ou VM; `git push --force` e `git reset --hard`; editar as próprias regras.
 - **O que precisava pedir antes:** `git push`, deploy no Azure, comandos de VM e de rede, `ssh` e `curl`.
-- **Rede de segurança extra:** um [hook](https://github.com/ENRICO741/nodeLogin/blob/main/.claude/hooks/block-dangerous.sh) rodava antes de todo comando e bloqueava padrões destrutivos (`rm -rf` na raiz ou na home, `az group delete`, `terraform destroy`), mesmo que escapassem das regras acima.
-- **Escopo mínimo na nuvem:** o agente usava um service principal com permissão só no grupo de recursos do TCC. O [`CLAUDE.md`](https://github.com/ENRICO741/nodeLogin/blob/main/CLAUDE.md) mandava rodar `what-if` antes de qualquer deploy e parar se a conta ativa não fosse a desse service principal.
+- **Rede de segurança extra:** um [hook](https://github.com/osamufelix/guardiao-impacta/blob/main/.claude/hooks/block-dangerous.sh) rodava antes de todo comando e bloqueava padrões destrutivos (`rm -rf` na raiz ou na home, `az group delete`, `terraform destroy`), mesmo que escapassem das regras acima.
+- **Escopo mínimo na nuvem:** o agente usava um service principal com permissão só no grupo de recursos do TCC. O [`CLAUDE.md`](https://github.com/osamufelix/guardiao-impacta/blob/main/CLAUDE.md) mandava rodar `what-if` antes de qualquer deploy e parar se a conta ativa não fosse a desse service principal.
 
 A monografia declara o uso de IA generativa no desenvolvimento e na revisão do texto (seção 1.6).
 
@@ -126,7 +125,7 @@ A monografia declara o uso de IA generativa no desenvolvimento e na revisão do 
   - **100 usuários simultâneos por 3 minutos**, metade novos (cadastro e trilha de aulas) e metade com conta: nenhuma falha, e 95% das respostas da API em até 20 ms (150 ms em login e cadastro).
   - **Estresse de 250 a 1.000 usuários** já logados, subindo em patamares: o p95 foi de 21 ms para 41 ms. Das 59.262 requisições, só 1 falhou, barrada pelo rate limit.
   - É carga sintética, não tráfego real. Com as pausas entre cliques, os 1.000 usuários geraram cerca de 146 requisições por segundo.
-  <!-- PENDENTE: link para os resultados brutos do k6 publicados -->
+  - Os resultados brutos não estão publicados; a rodada de 100 usuários está descrita na monografia.
 
 <!-- PENDENTE: teste de mutação (número + link para o relatório) -->
 
@@ -158,7 +157,7 @@ Em 01/10/2026, no meio do desenvolvimento, fiz uma rodada de segurança com o Cl
 
 O npm saiu da imagem de produção da API, e o Trivy passou a achar 0 CVEs nela. As CVEs da imagem do Caddy estavam no binário dele; o deploy passou a reconstruir as imagens com `--pull` a cada versão. A rodada também achou um bug de disponibilidade: com o banco fora do ar, a API caía em vez de responder 503. Isso foi corrigido.
 
-Limites: o ZAP testou só as páginas públicas, porque não faz login sozinho. Os relatórios em HTML e JSON se perderam com a pasta temporária; o que existe hoje foi reconstruído a partir do registro da sessão. <!-- PENDENTE: link para os relatórios publicados -->
+Limites: o ZAP testou só as páginas públicas, porque não faz login sozinho. Os relatórios em HTML e JSON se perderam com a pasta temporária, e os números acima vêm do registro da sessão. Os relatórios não estão publicados.
 
 ## Pesquisa e privacidade
 
@@ -188,5 +187,5 @@ Limites: o ZAP testou só as páginas públicas, porque não faz login sozinho. 
 
 ## Links
 
-- Código: [github.com/ENRICO741/nodeLogin](https://github.com/ENRICO741/nodeLogin)
+- Código: [github.com/osamufelix/guardiao-impacta](https://github.com/osamufelix/guardiao-impacta)
 - Monografia: em breve

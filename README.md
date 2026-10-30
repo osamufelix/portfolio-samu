@@ -3,7 +3,7 @@
 <!-- PENDENTE: frase de posicionamento final (igual à home e ao headline do LinkedIn) -->
 > DevOps/SRE que entrega com automação, testes e agentes de IA sob controle.
 
-Site: <!-- PENDENTE: URL do *.pages.dev depois do primeiro deploy -->
+Site: https://portfolio-samuel.pages.dev
 
 ## Cases
 
@@ -40,7 +40,7 @@ O `terraform apply` roda localmente; o state fica no HCP Terraform ([ADR 003](do
 
 ```bash
 cd infra/terraform
-export CLOUDFLARE_API_TOKEN=...      # Pages: Edit + Account Analytics: Edit
+export CLOUDFLARE_API_TOKEN=...      # Pages: Edit + Account Settings: Edit
 terraform login                      # HCP Terraform
 terraform init
 terraform apply -var account_id=<id da conta Cloudflare>
