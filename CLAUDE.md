@@ -17,3 +17,4 @@ Site de portfólio pessoal. Visão geral e arquitetura: [README.md](README.md).
 - Qualquer alteração de arquivo: trabalhe numa worktree, numa branch `tipo/descricao` e criada a partir da main.
 - `main` publica direto em produção (Cloudflare Pages). Entregue com `/ship pr`, não com push na main.
 - Commits: conventional commits em pt-BR (ex.: `feat: ...`, `fix(ci): ...`).
+- Ao finalizar o trabalho e ver que PR foi mergeado, exluir a branch local + worktree + dar git pull na main
