@@ -13,6 +13,8 @@ const { lang, title, description } = Astro.props;
 const alt = Astro.props.altPath ?? otherLangPath(lang, Astro.url.pathname);
 const t = ui[lang];
 const p = prefix(lang);
+const path = Astro.url.pathname.replace(/\/$/, '');
+const cur = (href: string) => (path === href || path.startsWith(`${href}/`) ? 'page' : undefined);
 // Token do Web Analytics (output do Terraform), injetado no build de produção pelo CI.
 const beacon = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 ---
@@ -38,10 +40,10 @@ const beacon = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
       <a class="lang" href={alt} hreflang={lang === 'pt' ? 'en' : 'pt-BR'} title={t.switchLabel}>
         [{lang === 'pt' ? <><b>BR</b>|EN</> : <>BR|<b>EN</b></>}]
       </a>
-      <a class="home" href={p || '/'}>~/samuel-felix</a>
+      <a class="home" href={p || '/'} aria-current={path === p ? 'page' : undefined}>~/samuel-felix</a>
       <nav>
-        <a href={`${p}/cases`}>{t.cases}</a>
-        <a href={`${p}/como-foi-feito`}>{t.howBuilt}</a>
+        <a href={`${p}/cases`} aria-current={cur(`${p}/cases`)}>{t.cases}</a>
+        <a href={`${p}/como-foi-feito`} aria-current={cur(`${p}/como-foi-feito`)}>{t.howBuilt}</a>
       </nav>
       <button class="theme" type="button" aria-label={t.theme} title={t.theme}>◐</button>
     </header>
