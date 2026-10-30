@@ -14,6 +14,6 @@ Site de portfólio pessoal. Visão geral e arquitetura: [README.md](README.md).
 - `npm run check && npm run build`: o mesmo que o CI roda. Só considere pronto se passar.
 
 ## Fluxo
-- Qualquer alteração de arquivo: trabalhe numa worktree, numa branch `tipo/descricao`.
+- Qualquer alteração de arquivo: trabalhe numa worktree, numa branch `tipo/descricao` e criada a partir da main.
 - `main` publica direto em produção (Cloudflare Pages). Entregue com `/ship pr`, não com push na main.
 - Commits: conventional commits em pt-BR (ex.: `feat: ...`, `fix(ci): ...`).
