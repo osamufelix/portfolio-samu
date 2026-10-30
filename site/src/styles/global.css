@@ -1,9 +1,9 @@
 :root {
-  --bg: #f7f7f4;
-  --surface: #ffffff;
+  --bg: #f3efe6;
+  --surface: #faf8f3;
   --fg: #1b1f24;
-  --muted: #57606a;
-  --border: #d8dbe0;
+  --muted: #565c63;
+  --border: #dcd6c8;
   --accent: #116a3a;
   --link: #0b5cad;
   --mono: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
@@ -302,7 +302,7 @@ figure img {
 }
 
 figure.wide img {
-  background: #fff;
+  background: #faf8f3; /* fixo: as imagens são desenhadas para fundo claro, mesmo no tema escuro */
   padding: 0.75rem;
 }
 
